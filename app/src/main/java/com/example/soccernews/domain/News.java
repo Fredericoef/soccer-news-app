@@ -3,12 +3,9 @@ package com.example.soccernews.domain;
 public class News {
 
     private String title;
-    private String descripton;
-
-    public News(String title, String descripton) {
-        this.title = title;
-        this.descripton = descripton;
-    }
+    private String description;
+    private String image;
+    private String link;
 
     public String getTitle() {
         return title;
@@ -18,11 +15,27 @@ public class News {
         this.title = title;
     }
 
-    public String getDescripton() {
-        return descripton;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescripton(String descripton) {
-        this.descripton = descripton;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }
