@@ -1,5 +1,9 @@
 package com.example.soccernews.ui.news;
 
+import static com.example.soccernews.ui.news.NewsViewModel.State.DOING;
+import static com.example.soccernews.ui.news.NewsViewModel.State.DONE;
+import static com.example.soccernews.ui.news.NewsViewModel.State.ERROR;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +14,15 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.soccernews.MainActivity;
+import com.example.soccernews.data.remote.data.local.AppDatabase;
 import com.example.soccernews.databinding.FragmentNewsBinding;
 import com.example.soccernews.ui.adapter.NewsAdapter;
 
 public class NewsFragment extends Fragment {
 
     private FragmentNewsBinding binding;
+    private AppDatabase db;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -25,11 +32,30 @@ public class NewsFragment extends Fragment {
         binding = FragmentNewsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+
         binding.rvNews.setLayoutManager(new LinearLayoutManager(getContext()));
         newsViewModel.getNews().observe(getViewLifecycleOwner(), news -> {
-            binding.rvNews.setAdapter(new NewsAdapter(news));
+            binding.rvNews.setAdapter(new NewsAdapter(news, updatedNews -> {
+               MainActivity activity = (MainActivity) getActivity();
+                if(activity != null){
+                    activity.getDb().newsDao().save(updatedNews);
+                }
+            }));
+        });
 
+        newsViewModel.getState().observe(getViewLifecycleOwner(), state -> {
+            switch (state){
+                case DOING:
+                    //todo: incluir SwipeRefreshLayout (loading)
+                    break;
+                case DONE:
+                    //TODO: Finalizar SwipeRefreshLayout (loading)
+                    break;
+                case ERROR:
+                    //TODO: Finalizar SwipeRefreshLayout (loading)
+                    //TODO: Mostro um erro genérico.
 
+            }
         });
         return root;
     }
